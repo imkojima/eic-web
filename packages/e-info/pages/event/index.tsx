@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { getGqlClient } from '~/apollo-client'
 import LayoutGeneral from '~/components/layout/layout-general'
 import { LOCATION_OPTIONS } from '~/constants/auth'
-import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
+import { DEFAULT_EVENT_IMAGE_PATH } from '~/constants/constant'
 import { MAX_CONTENT_WIDTH } from '~/constants/layout'
 import type { HeaderContextData } from '~/contexts/header-context'
 import type { Event } from '~/graphql/query/event'
@@ -381,7 +381,7 @@ const EventsPage: NextPageWithLayout<PageProps> = ({ events }) => {
     return (
       event.heroImage?.resized?.w480 ||
       event.heroImage?.resized?.original ||
-      DEFAULT_POST_IMAGE_PATH
+      DEFAULT_EVENT_IMAGE_PATH
     )
   }
 

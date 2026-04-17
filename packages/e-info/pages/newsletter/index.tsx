@@ -10,7 +10,7 @@ import styled from 'styled-components'
 
 import { getGqlClient } from '~/apollo-client'
 import LayoutGeneral from '~/components/layout/layout-general'
-import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
+import { DEFAULT_NEWSLETTER_IMAGE_PATH } from '~/constants/constant'
 import { MAX_CONTENT_WIDTH } from '~/constants/layout'
 import type { HeaderContextData } from '~/contexts/header-context'
 import type { Newsletter } from '~/graphql/query/newsletter'
@@ -669,7 +669,7 @@ const NewsletterOverviewPage: NextPageWithLayout<PageProps> = ({
                             src={
                               cell.newsletter.heroImage?.resized?.w480 ||
                               cell.newsletter.heroImage?.resized?.original ||
-                              DEFAULT_POST_IMAGE_PATH
+                              DEFAULT_NEWSLETTER_IMAGE_PATH
                             }
                             alt={cell.newsletter.title || '電子報'}
                             fill
@@ -701,7 +701,7 @@ const NewsletterOverviewPage: NextPageWithLayout<PageProps> = ({
                           src={
                             cell.newsletter.heroImage?.resized?.w480 ||
                             cell.newsletter.heroImage?.resized?.original ||
-                            DEFAULT_POST_IMAGE_PATH
+                            DEFAULT_NEWSLETTER_IMAGE_PATH
                           }
                           alt={cell.newsletter.title || '電子報'}
                           fill
