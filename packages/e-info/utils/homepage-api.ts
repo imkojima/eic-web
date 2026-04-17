@@ -15,7 +15,6 @@ import {
   CACHE_TTL_MS,
   HEALTH_CHECK_TIMEOUT_MS,
 } from '~/constants/layout'
-import { rewriteGcsUrls } from '~/utils/rewrite-gcs-urls'
 import type {
   Ad,
   HomepagePick,
@@ -41,6 +40,7 @@ import {
   multipleSectionsWithCategoriesAndPosts,
   topicsWithPosts,
 } from '~/graphql/query/section'
+import { rewriteGcsUrls } from '~/utils/rewrite-gcs-urls'
 
 // In-memory cache for homepage data
 let cachedHomepageData: HomepageData | null = null
@@ -145,7 +145,6 @@ async function fetchFromJsonApi(): Promise<HomepageApiResponse> {
  * JSON API 相容處理：將 Post 上舊格式 category（單數）轉換為 categories（陣列）
  * 後端 JSON 產生器更新後可移除此函式
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalizePostCategory(post: any): any {
   if (!post || typeof post !== 'object') return post
   if ('category' in post && !('categories' in post)) {
@@ -155,10 +154,7 @@ function normalizePostCategory(post: any): any {
   return post
 }
 
-function normalizeHomepageResponse(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any
-): HomepageApiResponse {
+function normalizeHomepageResponse(data: any): HomepageApiResponse {
   // Normalize post arrays that contain Post objects with category field
   const postArrayKeys = [
     'newsPosts',
@@ -186,8 +182,9 @@ function normalizeHomepageResponse(
             cat.posts = cat.posts.map(normalizePostCategory)
           }
           if (Array.isArray(cat.featuredPostsInInputOrder)) {
-            cat.featuredPostsInInputOrder =
-              cat.featuredPostsInInputOrder.map(normalizePostCategory)
+            cat.featuredPostsInInputOrder = cat.featuredPostsInInputOrder.map(
+              normalizePostCategory
+            )
           }
         }
       }
@@ -284,8 +281,8 @@ async function fetchFromGraphQL(
  * 排序 Topics 並取前 N 筆
  * 排序邏輯：
  *   1. 先過濾有關聯文章的 topics (posts.length > 0)
- *   2. isPinned = true 的 topics 優先，依 sortOrder 升冪排序
- *   3. isPinned = false 的 topics，依 sortOrder 升冪排序
+ *   2. isPinned = true 的 topics 優先
+ *   3. 相同 isPinned 狀態下，依 publishTime 降冪排序（null 排最後）
  *   4. 取前 maxTopics 筆
  */
 function sortAndLimitTopics(topics: Topic[], maxTopics: number = 4): Topic[] {
@@ -299,10 +296,10 @@ function sortAndLimitTopics(topics: Topic[], maxTopics: number = 4): Topic[] {
     if (a.isPinned && !b.isPinned) return -1
     if (!a.isPinned && b.isPinned) return 1
 
-    // 相同 isPinned 狀態下，依 sortOrder 升冪排序
-    const sortOrderA = a.sortOrder ?? Infinity
-    const sortOrderB = b.sortOrder ?? Infinity
-    return sortOrderA - sortOrderB
+    // 相同 isPinned 狀態下，依 publishTime 降冪排序；null 視為最舊排最後
+    const timeA = a.publishTime ? new Date(a.publishTime).getTime() : 0
+    const timeB = b.publishTime ? new Date(b.publishTime).getTime() : 0
+    return timeB - timeA
   })
 
   return sorted.slice(0, maxTopics)

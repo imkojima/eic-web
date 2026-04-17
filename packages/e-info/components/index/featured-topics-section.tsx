@@ -165,12 +165,12 @@ const HeroArticle = styled.a`
 
 const HeroImageWrapper = styled.div`
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 2 / 1;
   background-color: #d1d5db;
 
   // Tablet
   @media (min-width: ${({ theme }) => theme.mediaSize.md}px) {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 2 / 1;
   }
 `
 
@@ -483,37 +483,40 @@ const FeaturedTopicsSection = ({
     return null
   }
 
-  // When no tab is selected (activeTopic === ''), aggregate all topics' posts
-  // When a tab is selected, show that topic's posts
-  let currentPosts: (typeof topicsWithPosts)[0]['posts']
+  // When no tab is selected (activeTopic === ''), show other topics in the list
+  // (each item links to /feature/[id]). When a tab is selected, show that
+  // topic's posts (each item links to /node/[id]).
   let heroTopic: (typeof topicsWithPosts)[0] | undefined
+  let listItems: {
+    id: string
+    title: string
+    excerpt?: string | null
+    heroImage: (typeof topicsWithPosts)[0]['heroImage']
+    href: string
+  }[]
+
   if (activeTopic === '') {
     heroTopic = topicsWithPosts[0]
-    // Aggregate all topics' posts, deduplicate by id, sort by publishTime desc
-    const allPostsMap = new Map<
-      string,
-      (typeof topicsWithPosts)[0]['posts'][0]
-    >()
-    for (const topic of topicsWithPosts) {
-      for (const post of topic.posts || []) {
-        if (!allPostsMap.has(post.id)) {
-          allPostsMap.set(post.id, post)
-        }
-      }
-    }
-    currentPosts = [...allPostsMap.values()].sort(
-      (a, b) =>
-        new Date(b.publishTime).getTime() - new Date(a.publishTime).getTime()
-    )
+    listItems = topicsWithPosts.slice(1, 4).map((topic) => ({
+      id: topic.id,
+      title: topic.title,
+      excerpt: topic.content,
+      heroImage: topic.heroImage,
+      href: `/feature/${topic.id}`,
+    }))
   } else {
     const currentTopic = topicsWithPosts.find(
       (topic) => topic.id === activeTopic
     )
     heroTopic = currentTopic
-    currentPosts = currentTopic?.posts || []
+    listItems = (currentTopic?.posts || []).slice(0, 3).map((post) => ({
+      id: post.id,
+      title: post.title,
+      excerpt: post.contentPreview,
+      heroImage: post.heroImage,
+      href: `/node/${post.id}`,
+    }))
   }
-
-  const articlePosts = currentPosts.slice(0, 3)
 
   return (
     <Container>
@@ -564,34 +567,29 @@ const FeaturedTopicsSection = ({
             </Link>
           )}
 
-          {/* Articles List - Links to individual posts */}
+          {/* List items - topics when no tab selected, posts otherwise */}
           <ArticlesList>
-            {articlePosts.length > 0 ? (
-              articlePosts.map((post) => {
-                const image = post.heroImage?.resized
-                const imageWebp = post.heroImage?.resizedWebp
+            {listItems.length > 0 ? (
+              listItems.map((item) => {
+                const image = item.heroImage?.resized
+                const imageWebp = item.heroImage?.resizedWebp
 
                 return (
-                  <Link
-                    key={post.id}
-                    href={`/node/${post.id}`}
-                    passHref
-                    legacyBehavior
-                  >
+                  <Link key={item.id} href={item.href} passHref legacyBehavior>
                     <ArticleItem>
                       <ArticleContent>
-                        <ArticleTitle>{post.title}</ArticleTitle>
-                        {post.contentPreview && (
-                          <ArticleExcerpt>{post.contentPreview}</ArticleExcerpt>
+                        <ArticleTitle>{item.title}</ArticleTitle>
+                        {item.excerpt && (
+                          <ArticleExcerpt>{item.excerpt}</ArticleExcerpt>
                         )}
                       </ArticleContent>
                       <ArticleImageWrapper>
                         <SharedImage
-                          key={`article-${activeTopic}-${post.id}`}
+                          key={`article-${activeTopic}-${item.id}`}
                           images={image || {}}
                           imagesWebP={imageWebp || {}}
                           defaultImage={DEFAULT_POST_IMAGE_PATH}
-                          alt={post.title}
+                          alt={item.title}
                           priority={false}
                           rwd={{
                             mobile: '130px',
