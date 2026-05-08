@@ -62,11 +62,7 @@ const BookmarkButton = styled.button<{
     `}
 `
 
-const CopyLinkItem = styled.li`
-  position: relative;
-`
-
-const CopiedToast = styled.span`
+const Tooltip = styled.span<{ $forceShow: boolean }>`
   position: absolute;
   bottom: calc(100% + 6px);
   left: 50%;
@@ -78,6 +74,22 @@ const CopiedToast = styled.span`
   font-size: 12px;
   white-space: nowrap;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  ${({ $forceShow }) =>
+    $forceShow &&
+    css`
+      opacity: 1;
+    `}
+`
+
+const TooltipItem = styled.li`
+  position: relative;
+
+  &:hover ${Tooltip} {
+    opacity: 1;
+  }
 `
 
 type ExternalLinkItem = {
@@ -104,6 +116,7 @@ export default function MediaLinkList({
   const [favoriteId, setFavoriteId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isCopied, setIsCopied] = useState(false)
+  const [showAddedToast, setShowAddedToast] = useState(false)
   const { member, firebaseUser, loading: authLoading } = useAuth()
 
   useEffect(() => {
@@ -198,6 +211,8 @@ export default function MediaLinkList({
         if (newFavoriteId) {
           setIsFavorited(true)
           setFavoriteId(newFavoriteId)
+          setShowAddedToast(true)
+          window.setTimeout(() => setShowAddedToast(false), 2000)
           gtag.sendMemberEvent('bookmark', postId)
         }
       }
@@ -230,10 +245,10 @@ export default function MediaLinkList({
   return (
     <MediaLinkWrapper className={className}>
       {!hideBookmark && (
-        <li key="Bookmark">
+        <TooltipItem key="Bookmark">
           <BookmarkButton
             type="button"
-            aria-label={isFavorited ? '取消收藏' : '加入收藏'}
+            aria-label={isFavorited ? '取消收藏' : '收藏文章'}
             onClick={handleBookmarkClick}
             $isActive={isFavorited}
             $isLoading={isLoading || authLoading}
@@ -241,7 +256,17 @@ export default function MediaLinkList({
           >
             {isFavorited ? <IconBookmarkFilled /> : <IconBookmark />}
           </BookmarkButton>
-        </li>
+          <Tooltip
+            $forceShow={showAddedToast}
+            role={showAddedToast ? 'status' : undefined}
+          >
+            {showAddedToast
+              ? '已加入收藏'
+              : isFavorited
+              ? '取消收藏'
+              : '收藏文章'}
+          </Tooltip>
+        </TooltipItem>
       )}
       {externalLinks.map((item) => {
         return (
@@ -256,16 +281,18 @@ export default function MediaLinkList({
           </li>
         )
       })}
-      <CopyLinkItem key="CopyLink">
+      <TooltipItem key="CopyLink">
         <button
           type="button"
-          aria-label={isCopied ? '已複製連結' : '複製連結'}
+          aria-label={isCopied ? '已複製' : '複製連結'}
           onClick={handleCopyClick}
         >
           <IconLink />
         </button>
-        {isCopied && <CopiedToast role="status">已複製連結</CopiedToast>}
-      </CopyLinkItem>
+        <Tooltip $forceShow={isCopied} role={isCopied ? 'status' : undefined}>
+          {isCopied ? '已複製' : '複製連結'}
+        </Tooltip>
+      </TooltipItem>
     </MediaLinkWrapper>
   )
 }
