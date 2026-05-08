@@ -158,10 +158,17 @@ export default async function handler(
       return res.status(500).json({ error: favoritesResult.error })
     }
 
+    // Drop orphaned favorites (post deleted/unlinked) so the client doesn't
+    // crash dereferencing a null `post`. Adjust the count by the same amount
+    // within this batch so the loaded/total ratio still matches.
+    const rawFavorites = favoritesResult.data?.favorites || []
+    const validFavorites = rawFavorites.filter((f) => f.post)
+    const orphanCount = rawFavorites.length - validFavorites.length
+
     return res.status(200).json({
       success: true,
-      favorites: favoritesResult.data?.favorites || [],
-      total: countResult.data?.favoritesCount ?? 0,
+      favorites: validFavorites,
+      total: Math.max(0, (countResult.data?.favoritesCount ?? 0) - orphanCount),
     })
   } catch (error) {
     console.error('[API /favorites/list] Error:', error)
