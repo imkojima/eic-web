@@ -929,7 +929,7 @@ const CreateEventPage: NextPageWithLayout = () => {
             </NoteItem>
             <NoteItem>
               相關問題請來信至
-              <a href="mailto:info@e-info.org.tw">info@e-info.org.tw</a>
+              <a href="mailto:infor@e-info.org.tw">infor@e-info.org.tw</a>
               ，我們將盡速為您解答。
             </NoteItem>
             <NoteItem>
