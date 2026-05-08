@@ -12,6 +12,12 @@ const PostCreditWrapper = styled.div`
   flex-direction: column;
   margin-top: 16px;
   padding: 0px 20px;
+  text-align: center;
+
+  ul,
+  ul > li {
+    justify-content: center;
+  }
 
   ${({ theme }) => theme.breakpoint.md} {
     padding: 0;
@@ -21,6 +27,12 @@ const PostCreditWrapper = styled.div`
     margin-top: 0;
     padding: 0;
     max-width: 180px;
+    text-align: left;
+
+    ul,
+    ul > li {
+      justify-content: flex-start;
+    }
   }
 `
 

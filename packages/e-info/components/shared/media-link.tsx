@@ -13,6 +13,7 @@ import IconBookmark from '~/public/icons/bookmark.svg'
 import IconBookmarkFilled from '~/public/icons/bookmark-filled.svg'
 import IconFacebook from '~/public/icons/facebook.svg'
 import IconLine from '~/public/icons/line.svg'
+import IconLink from '~/public/icons/link.svg'
 import IconX from '~/public/icons/x.svg'
 import * as gtag from '~/utils/gtag'
 
@@ -61,6 +62,24 @@ const BookmarkButton = styled.button<{
     `}
 `
 
+const CopyLinkItem = styled.li`
+  position: relative;
+`
+
+const CopiedToast = styled.span`
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+`
+
 type ExternalLinkItem = {
   name: string
   href: string
@@ -84,6 +103,7 @@ export default function MediaLinkList({
   const [isFavorited, setIsFavorited] = useState(false)
   const [favoriteId, setFavoriteId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isCopied, setIsCopied] = useState(false)
   const { member, firebaseUser, loading: authLoading } = useAuth()
 
   useEffect(() => {
@@ -196,6 +216,17 @@ export default function MediaLinkList({
     authLoading,
   ])
 
+  const handleCopyClick = useCallback(async () => {
+    gtag.sendEvent('post', 'click', 'post-share-copy-link')
+    try {
+      await navigator.clipboard.writeText(href || window.location.href)
+      setIsCopied(true)
+      window.setTimeout(() => setIsCopied(false), 2000)
+    } catch (error) {
+      console.error('Copy link failed:', error)
+    }
+  }, [href])
+
   return (
     <MediaLinkWrapper className={className}>
       {!hideBookmark && (
@@ -225,6 +256,16 @@ export default function MediaLinkList({
           </li>
         )
       })}
+      <CopyLinkItem key="CopyLink">
+        <button
+          type="button"
+          aria-label={isCopied ? '已複製連結' : '複製連結'}
+          onClick={handleCopyClick}
+        >
+          <IconLink />
+        </button>
+        {isCopied && <CopiedToast role="status">已複製連結</CopiedToast>}
+      </CopyLinkItem>
     </MediaLinkWrapper>
   )
 }
