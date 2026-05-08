@@ -1,5 +1,4 @@
 // Section page - switches between default (listing) and column (grid) layouts based on section.style
-import SharedImage from '@readr-media/react-image'
 import errors from '@twreporter/errors'
 import type { GetServerSideProps } from 'next'
 import Link from 'next/link'
@@ -10,6 +9,7 @@ import styled from 'styled-components'
 import { getGqlClient } from '~/apollo-client'
 import LayoutGeneral from '~/components/layout/layout-general'
 import ArticleLists from '~/components/shared/article-lists'
+import ResponsiveImage from '~/components/shared/responsive-image'
 import {
   DEFAULT_NEWS_IMAGE_PATH,
   DEFAULT_POST_IMAGE_PATH,
@@ -760,18 +760,12 @@ const CategoryArticleSection = ({ category }: CategoryArticleSectionProps) => {
         <Link href={`/node/${largePost.id}`} passHref legacyBehavior>
           <LargeCard>
             <LargeCardImageWrapper>
-              <SharedImage
-                images={largePost.heroImage?.resized || {}}
-                imagesWebP={largePost.heroImage?.resizedWebp || {}}
-                defaultImage={getPostDefaultImage(largePost.style)}
+              <ResponsiveImage
+                resized={largePost.heroImage?.resized}
+                resizedWebp={largePost.heroImage?.resizedWebp}
+                defaultSrc={getPostDefaultImage(largePost.style)}
                 alt={largePost.title}
-                priority={false}
-                rwd={{
-                  mobile: '100vw',
-                  tablet: '50vw',
-                  desktop: '540px',
-                  default: '540px',
-                }}
+                sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 540px"
               />
             </LargeCardImageWrapper>
             <LargeCardDate>
@@ -786,18 +780,12 @@ const CategoryArticleSection = ({ category }: CategoryArticleSectionProps) => {
           <Link key={post.id} href={`/node/${post.id}`} passHref legacyBehavior>
             <SmallCard>
               <SmallCardImageWrapper>
-                <SharedImage
-                  images={post.heroImage?.resized || {}}
-                  imagesWebP={post.heroImage?.resizedWebp || {}}
-                  defaultImage={getPostDefaultImage(post.style)}
+                <ResponsiveImage
+                  resized={post.heroImage?.resized}
+                  resizedWebp={post.heroImage?.resizedWebp}
+                  defaultSrc={getPostDefaultImage(post.style)}
                   alt={post.title}
-                  priority={false}
-                  rwd={{
-                    mobile: '160px',
-                    tablet: '160px',
-                    desktop: '180px',
-                    default: '180px',
-                  }}
+                  sizes="(max-width: 1199px) 160px, 180px"
                 />
               </SmallCardImageWrapper>
               <SmallCardContent>
@@ -959,17 +947,13 @@ const SectionColumnPage = ({ section, categories }: SectionColumnPageProps) => {
       <HeroSection>
         <HeroImageWrapper>
           {hasHeroImage ? (
-            <SharedImage
-              images={section.heroImage?.resized || {}}
-              imagesWebP={section.heroImage?.resizedWebp || {}}
+            <ResponsiveImage
+              resized={section.heroImage?.resized}
+              resizedWebp={section.heroImage?.resizedWebp}
+              defaultSrc={DEFAULT_POST_IMAGE_PATH}
               alt={section.name}
-              priority={true}
-              rwd={{
-                mobile: '100vw',
-                tablet: '100vw',
-                desktop: '100vw',
-                default: '100vw',
-              }}
+              priority
+              sizes="100vw"
             />
           ) : (
             <img src={DEFAULT_POST_IMAGE_PATH} alt={section.name} />

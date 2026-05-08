@@ -1,7 +1,5 @@
 // 該元件作為文章資訊卡片使用
 
-import type { Breakpoint, Rwd } from '@readr-media/react-image'
-import SharedImage from '@readr-media/react-image'
 import Link from 'next/link'
 import styled from 'styled-components'
 
@@ -11,6 +9,7 @@ import type { ArticleCard } from '~/types/component'
 
 import DateInfo from './date-info'
 import ReportLabel from './report-label'
+import ResponsiveImage from './responsive-image'
 
 type StyledProps = {
   $shouldReverseInMobile: boolean
@@ -157,8 +156,7 @@ type ArticleListCardProps = Omit<ArticleCard, 'id'> & {
   shouldHideBottomInfos?: boolean
   shouldNotLazyload?: boolean
   onClick?: () => any
-  rwd?: Rwd
-  breakpoint?: Breakpoint
+  sizes?: string
   defaultImage?: string
 }
 
@@ -176,8 +174,7 @@ export default function ArticleListCard({
   shouldHideBottomInfos = false,
   shouldNotLazyload = false,
   onClick,
-  rwd,
-  breakpoint,
+  sizes,
   defaultImage = DEFAULT_POST_IMAGE_PATH,
 }: ArticleListCardProps): JSX.Element {
   const isReportAndShouldHighlight = isReport && shouldHighlightReport
@@ -194,17 +191,14 @@ export default function ArticleListCard({
         $shouldReverseInMobile={shouldReverseInMobile}
         $shouldHighlightReport={isReportAndShouldHighlight}
       >
-        <picture>
-          <SharedImage
-            images={images}
-            imagesWebP={imagesWebP}
-            defaultImage={defaultImage}
-            alt={title}
-            priority={shouldNotLazyload}
-            rwd={rwd}
-            breakpoint={breakpoint}
-          />
-        </picture>
+        <ResponsiveImage
+          resized={images}
+          resizedWebp={imagesWebP}
+          defaultSrc={defaultImage}
+          alt={title}
+          priority={shouldNotLazyload}
+          sizes={sizes}
+        />
         {isReport && <ReportLabel />}
       </ImageWrapper>
       <TextWrapper $shouldHighlightReport={isReportAndShouldHighlight}>

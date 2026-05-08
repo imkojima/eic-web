@@ -1,8 +1,8 @@
-import SharedImage from '@readr-media/react-image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import ResponsiveImage from '~/components/shared/responsive-image'
 import {
   DEFAULT_NEWS_IMAGE_PATH,
   DEFAULT_POST_IMAGE_PATH,
@@ -532,19 +532,13 @@ const NewsSection = ({ section }: NewsSectionProps) => {
           <Link href={`/node/${featuredPost.id}`} passHref legacyBehavior>
             <FeaturedArticle>
               <FeaturedImageWrapper>
-                <SharedImage
-                  key={`featured-${activeCategory}-${featuredPost.id}`}
-                  images={featuredPost.heroImage?.resized || {}}
-                  imagesWebP={featuredPost.heroImage?.resizedWebp || {}}
-                  defaultImage={getDefaultImage(featuredPost)}
+                <ResponsiveImage
+                  resized={featuredPost.heroImage?.resized}
+                  resizedWebp={featuredPost.heroImage?.resizedWebp}
+                  defaultSrc={getDefaultImage(featuredPost)}
                   alt={featuredPost.title}
-                  priority={true}
-                  rwd={{
-                    mobile: '100vw',
-                    tablet: '66vw',
-                    desktop: '740px',
-                    default: '740px',
-                  }}
+                  priority
+                  sizes="(max-width: 767px) 100vw, (max-width: 1199px) 66vw, 740px"
                 />
               </FeaturedImageWrapper>
 
@@ -577,19 +571,12 @@ const NewsSection = ({ section }: NewsSectionProps) => {
                 >
                   <RelatedArticle>
                     <RelatedImageWrapper>
-                      <SharedImage
-                        key={`related-${activeCategory}-${post.id}`}
-                        images={image || {}}
-                        imagesWebP={imageWebp || {}}
-                        defaultImage={getDefaultImage(post)}
+                      <ResponsiveImage
+                        resized={image}
+                        resizedWebp={imageWebp}
+                        defaultSrc={getDefaultImage(post)}
                         alt={post.title}
-                        priority={false}
-                        rwd={{
-                          mobile: '100vw',
-                          tablet: '50vw',
-                          desktop: '160px',
-                          default: '160px',
-                        }}
+                        sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 160px"
                       />
                     </RelatedImageWrapper>
                     <RelatedContent>

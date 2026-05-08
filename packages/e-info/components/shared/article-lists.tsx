@@ -53,15 +53,9 @@ export default function ArticleLists({
           isReport={false}
           shouldHighlightReport={false}
           shouldReverseInMobile={true}
-          rwd={{
-            mobile: '30vw',
-            tablet: '50vw',
-            default: '256px',
-          }}
-          breakpoint={{
-            mobile: `${theme.mediaSize.sm - 1}px`,
-            tablet: `${theme.mediaSize.xl - 1}px`,
-          }}
+          sizes={`(max-width: ${theme.mediaSize.sm - 1}px) 30vw, (max-width: ${
+            theme.mediaSize.xl - 1
+          }px) 50vw, 256px`}
           onClick={() =>
             gtag.sendEvent('listing', 'click', `listing-${article.title}`)
           }

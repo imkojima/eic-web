@@ -1,8 +1,8 @@
-import SharedImage from '@readr-media/react-image'
 import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 
+import ResponsiveImage from '~/components/shared/responsive-image'
 import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
 import { MAX_CONTENT_WIDTH } from '~/constants/layout'
 import type { HomepagePick } from '~/graphql/query/section'
@@ -222,18 +222,12 @@ const HighlightSection = ({ picks = [] }: HighlightSectionProps) => {
             <Link key={pick.id} href={linkUrl} passHref legacyBehavior>
               <ArticleCard>
                 <ImageContainer>
-                  <SharedImage
-                    images={resized || {}}
-                    imagesWebP={resizedWebp || {}}
-                    defaultImage={DEFAULT_POST_IMAGE_PATH}
+                  <ResponsiveImage
+                    resized={resized}
+                    resizedWebp={resizedWebp}
+                    defaultSrc={DEFAULT_POST_IMAGE_PATH}
                     alt={title}
-                    priority={false}
-                    rwd={{
-                      mobile: '200px',
-                      tablet: '33vw',
-                      desktop: '160px',
-                      default: '160px',
-                    }}
+                    sizes="(max-width: 767px) 200px, (max-width: 1199px) 33vw, 160px"
                   />
                 </ImageContainer>
                 <ArticleTitle>{title}</ArticleTitle>

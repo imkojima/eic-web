@@ -1,6 +1,6 @@
-import SharedImage from '@readr-media/react-image'
 import styled from 'styled-components'
 
+import ResponsiveImage from '~/components/shared/responsive-image'
 import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
 import type { Post } from '~/graphql/fragments/post'
 import * as gtag from '~/utils/gtag'
@@ -109,20 +109,14 @@ export default function RelatedPost({
         }
       >
         <ImageWrapper>
-          <SharedImage
-            images={image}
-            imagesWebP={
+          <ResponsiveImage
+            resized={image}
+            resizedWebp={
               post.ogImage?.resizedWebp || post.heroImage?.resizedWebp
             }
-            defaultImage={DEFAULT_POST_IMAGE_PATH}
+            defaultSrc={DEFAULT_POST_IMAGE_PATH}
             alt={post.title}
-            priority={false}
-            rwd={{
-              mobile: '100vw',
-              tablet: '50vw',
-              desktop: '33vw',
-              default: '400px',
-            }}
+            sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 33vw"
           />
         </ImageWrapper>
         <Title>{post.title}</Title>

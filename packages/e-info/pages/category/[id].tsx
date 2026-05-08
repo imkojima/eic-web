@@ -1,5 +1,4 @@
 // Category listing page - shows posts from specific category
-import SharedImage from '@readr-media/react-image'
 import errors from '@twreporter/errors'
 import type { GetServerSideProps } from 'next'
 import Link from 'next/link'
@@ -11,6 +10,7 @@ import { getGqlClient } from '~/apollo-client'
 import LayoutGeneral from '~/components/layout/layout-general'
 import ArticleLists from '~/components/shared/article-lists'
 import Pagination from '~/components/shared/pagination'
+import ResponsiveImage from '~/components/shared/responsive-image'
 import {
   DEFAULT_NEWS_IMAGE_PATH,
   DEFAULT_POST_IMAGE_PATH,
@@ -747,18 +747,12 @@ const ClassifyArticleSectionComponent = ({
         <Link href={`/node/${largePost.id}`} passHref legacyBehavior>
           <ClassifyLargeCard>
             <ClassifyLargeCardImageWrapper>
-              <SharedImage
-                images={largePost.heroImage?.resized || {}}
-                imagesWebP={largePost.heroImage?.resizedWebp || {}}
-                defaultImage={getPostDefaultImage(largePost.style)}
+              <ResponsiveImage
+                resized={largePost.heroImage?.resized}
+                resizedWebp={largePost.heroImage?.resizedWebp}
+                defaultSrc={getPostDefaultImage(largePost.style)}
                 alt={largePost.title}
-                priority={false}
-                rwd={{
-                  mobile: '100vw',
-                  tablet: '50vw',
-                  desktop: '540px',
-                  default: '540px',
-                }}
+                sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 540px"
               />
             </ClassifyLargeCardImageWrapper>
             <ClassifyLargeCardDate>
@@ -773,18 +767,12 @@ const ClassifyArticleSectionComponent = ({
           <Link key={post.id} href={`/node/${post.id}`} passHref legacyBehavior>
             <ClassifySmallCard>
               <ClassifySmallCardImageWrapper>
-                <SharedImage
-                  images={post.heroImage?.resized || {}}
-                  imagesWebP={post.heroImage?.resizedWebp || {}}
-                  defaultImage={getPostDefaultImage(post.style)}
+                <ResponsiveImage
+                  resized={post.heroImage?.resized}
+                  resizedWebp={post.heroImage?.resizedWebp}
+                  defaultSrc={getPostDefaultImage(post.style)}
                   alt={post.title}
-                  priority={false}
-                  rwd={{
-                    mobile: '160px',
-                    tablet: '160px',
-                    desktop: '180px',
-                    default: '180px',
-                  }}
+                  sizes="(max-width: 1199px) 160px, 180px"
                 />
               </ClassifySmallCardImageWrapper>
               <ClassifySmallCardContent>
@@ -832,17 +820,13 @@ const SectionHeaderWithTabs = ({
         <ColumnHeroSection>
           <ColumnHeroImageWrapper>
             {section.heroImage?.resized ? (
-              <SharedImage
-                images={section.heroImage.resized || {}}
-                imagesWebP={section.heroImage.resizedWebp || {}}
+              <ResponsiveImage
+                resized={section.heroImage.resized}
+                resizedWebp={section.heroImage.resizedWebp}
+                defaultSrc={DEFAULT_POST_IMAGE_PATH}
                 alt={section.name}
-                priority={true}
-                rwd={{
-                  mobile: '100vw',
-                  tablet: '100vw',
-                  desktop: '100vw',
-                  default: '100vw',
-                }}
+                priority
+                sizes="100vw"
               />
             ) : (
               <img src={DEFAULT_POST_IMAGE_PATH} alt={section.name} />
@@ -941,17 +925,13 @@ const CategoryPage: NextPageWithLayout<PageProps> = (props) => {
           <ColumnHeroSection>
             <ColumnHeroImageWrapper>
               {category.heroImage?.resized ? (
-                <SharedImage
-                  images={category.heroImage.resized || {}}
-                  imagesWebP={category.heroImage.resizedWebp || {}}
+                <ResponsiveImage
+                  resized={category.heroImage.resized}
+                  resizedWebp={category.heroImage.resizedWebp}
+                  defaultSrc={DEFAULT_POST_IMAGE_PATH}
                   alt={category.name}
-                  priority={true}
-                  rwd={{
-                    mobile: '100vw',
-                    tablet: '100vw',
-                    desktop: '100vw',
-                    default: '100vw',
-                  }}
+                  priority
+                  sizes="100vw"
                 />
               ) : (
                 <img src={DEFAULT_POST_IMAGE_PATH} alt={category.name} />
@@ -1025,17 +1005,13 @@ const CategoryPage: NextPageWithLayout<PageProps> = (props) => {
           <ColumnHeroSection>
             <ColumnHeroImageWrapper>
               {category.heroImage?.resized ? (
-                <SharedImage
-                  images={category.heroImage.resized || {}}
-                  imagesWebP={category.heroImage.resizedWebp || {}}
+                <ResponsiveImage
+                  resized={category.heroImage.resized}
+                  resizedWebp={category.heroImage.resizedWebp}
+                  defaultSrc={DEFAULT_POST_IMAGE_PATH}
                   alt={category.name}
-                  priority={true}
-                  rwd={{
-                    mobile: '100vw',
-                    tablet: '100vw',
-                    desktop: '100vw',
-                    default: '100vw',
-                  }}
+                  priority
+                  sizes="100vw"
                 />
               ) : (
                 <img src={DEFAULT_POST_IMAGE_PATH} alt={category.name} />

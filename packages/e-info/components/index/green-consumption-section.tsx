@@ -1,8 +1,8 @@
-import SharedImage from '@readr-media/react-image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import ResponsiveImage from '~/components/shared/responsive-image'
 import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
 import { MAX_CONTENT_WIDTH } from '~/constants/layout'
 import type { GreenConsumptionData } from '~/utils/homepage-api'
@@ -289,19 +289,12 @@ const GreenConsumptionSection = ({ data }: GreenConsumptionSectionProps) => {
                 >
                   <ArticleCard>
                     <ImageWrapper>
-                      <SharedImage
-                        key={`green-${activeTab}-${post.id}`}
-                        images={image || {}}
-                        imagesWebP={imageWebp || {}}
-                        defaultImage={DEFAULT_POST_IMAGE_PATH}
+                      <ResponsiveImage
+                        resized={image}
+                        resizedWebp={imageWebp}
+                        defaultSrc={DEFAULT_POST_IMAGE_PATH}
                         alt={post.title}
-                        priority={false}
-                        rwd={{
-                          mobile: '200px',
-                          tablet: '33vw',
-                          desktop: '350px',
-                          default: '350px',
-                        }}
+                        sizes="(max-width: 767px) 200px, (max-width: 1199px) 33vw, 350px"
                       />
                     </ImageWrapper>
                     <ArticleTitle>{post.title}</ArticleTitle>

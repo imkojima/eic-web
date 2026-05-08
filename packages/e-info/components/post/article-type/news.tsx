@@ -1,4 +1,3 @@
-import SharedImage from '@readr-media/react-image'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -9,6 +8,7 @@ import PostDonation from '~/components/post/post-donation'
 import PostTitle from '~/components/post/post-title'
 import RelatedPosts from '~/components/post/related-post'
 import SideIndex from '~/components/post/side-index'
+import ResponsiveImage from '~/components/shared/responsive-image'
 import {
   DEFAULT_NEWS_IMAGE_PATH,
   DEFAULT_POST_IMAGE_PATH,
@@ -201,12 +201,13 @@ export default function News({
         <article id="post" ref={readingProgressRef}>
           {shouldShowHeroImage && (
             <HeroImage>
-              <SharedImage
-                images={heroImageToUse}
-                imagesWebP={heroImageWebpToUse}
-                defaultImage={defaultImage}
-                alt={postData?.title}
-                priority={true}
+              <ResponsiveImage
+                resized={heroImageToUse}
+                resizedWebp={heroImageWebpToUse}
+                defaultSrc={defaultImage}
+                alt={postData?.title || ''}
+                priority
+                sizes="(max-width: 1199px) 100vw, 960px"
               />
               {!isEditorStyle && (postData as any)?.heroCaption && (
                 <figcaption>{(postData as any).heroCaption}</figcaption>

@@ -1,8 +1,8 @@
-import SharedImage from '@readr-media/react-image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import ResponsiveImage from '~/components/shared/responsive-image'
 import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
 import { MAX_CONTENT_WIDTH } from '~/constants/layout'
 import type { SectionInfo } from '~/utils/homepage-api'
@@ -346,19 +346,12 @@ const SupplementSection = ({ section }: SupplementSectionProps) => {
               >
                 <ArticleCard>
                   <ImageWrapper>
-                    <SharedImage
-                      key={`supplement-${activeCategory}-${post.id}`}
-                      images={image || {}}
-                      imagesWebP={imageWebp || {}}
-                      defaultImage={DEFAULT_POST_IMAGE_PATH}
+                    <ResponsiveImage
+                      resized={image}
+                      resizedWebp={imageWebp}
+                      defaultSrc={DEFAULT_POST_IMAGE_PATH}
                       alt={post.title}
-                      priority={false}
-                      rwd={{
-                        mobile: '130px',
-                        tablet: '200px',
-                        desktop: '300px',
-                        default: '300px',
-                      }}
+                      sizes="(max-width: 767px) 130px, (max-width: 1199px) 200px, 300px"
                     />
                   </ImageWrapper>
                   <ArticleContent>

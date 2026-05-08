@@ -1,8 +1,8 @@
-import SharedImage from '@readr-media/react-image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import ResponsiveImage from '~/components/shared/responsive-image'
 import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
 import { MAX_CONTENT_WIDTH } from '~/constants/layout'
 import type { ReadingRankingArticle, Topic } from '~/graphql/query/section'
@@ -546,19 +546,13 @@ const FeaturedTopicsSection = ({
             <Link href={`/feature/${heroTopic.id}`} passHref legacyBehavior>
               <HeroArticle>
                 <HeroImageWrapper>
-                  <SharedImage
-                    key={`hero-${activeTopic}-${heroTopic.id}`}
-                    images={heroTopic.heroImage?.resized || {}}
-                    imagesWebP={heroTopic.heroImage?.resizedWebp || {}}
-                    defaultImage={DEFAULT_POST_IMAGE_PATH}
+                  <ResponsiveImage
+                    resized={heroTopic.heroImage?.resized}
+                    resizedWebp={heroTopic.heroImage?.resizedWebp}
+                    defaultSrc={DEFAULT_POST_IMAGE_PATH}
                     alt={heroTopic.title}
-                    priority={true}
-                    rwd={{
-                      mobile: '100vw',
-                      tablet: '100vw',
-                      desktop: '760px',
-                      default: '760px',
-                    }}
+                    priority
+                    sizes="(max-width: 1199px) 100vw, 760px"
                   />
                 </HeroImageWrapper>
                 <HeroOverlay>
@@ -585,19 +579,12 @@ const FeaturedTopicsSection = ({
                         )}
                       </ArticleContent>
                       <ArticleImageWrapper $isTopicMode={activeTopic === ''}>
-                        <SharedImage
-                          key={`article-${activeTopic}-${item.id}`}
-                          images={image || {}}
-                          imagesWebP={imageWebp || {}}
-                          defaultImage={DEFAULT_POST_IMAGE_PATH}
+                        <ResponsiveImage
+                          resized={image}
+                          resizedWebp={imageWebp}
+                          defaultSrc={DEFAULT_POST_IMAGE_PATH}
                           alt={item.title}
-                          priority={false}
-                          rwd={{
-                            mobile: '130px',
-                            tablet: '289px',
-                            desktop: '400px',
-                            default: '400px',
-                          }}
+                          sizes="(max-width: 767px) 130px, (max-width: 1199px) 289px, 400px"
                         />
                       </ArticleImageWrapper>
                     </ArticleItem>

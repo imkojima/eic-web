@@ -1,7 +1,5 @@
 // Featured Topic 單頁
 import { Eic } from '@eic-web/draft-renderer'
-// @ts-ignore: no definition
-import SharedImage from '@readr-media/react-image'
 import errors from '@twreporter/errors'
 import type { GetServerSideProps } from 'next'
 import Link from 'next/link'
@@ -11,6 +9,7 @@ import styled from 'styled-components'
 
 import { getGqlClient } from '~/apollo-client'
 import LayoutGeneral from '~/components/layout/layout-general'
+import ResponsiveImage from '~/components/shared/responsive-image'
 import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
 import { MAX_CONTENT_WIDTH } from '~/constants/layout'
 import type { HeaderContextData } from '~/contexts/header-context'
@@ -427,12 +426,13 @@ const TopicPage: NextPageWithLayout<PageProps> = ({ topic }) => {
       {/* Hero Section */}
       {hasHeroImage && (
         <HeroImage>
-          <SharedImage
-            images={heroResized}
-            imagesWebP={heroResizedWebp}
-            defaultImage={DEFAULT_POST_IMAGE_PATH}
+          <ResponsiveImage
+            resized={heroResized}
+            resizedWebp={heroResizedWebp}
+            defaultSrc={DEFAULT_POST_IMAGE_PATH}
             alt={topic.title || ''}
-            priority={true}
+            priority
+            sizes="(max-width: 1199px) 100vw, 960px"
           />
         </HeroImage>
       )}

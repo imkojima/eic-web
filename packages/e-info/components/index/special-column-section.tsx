@@ -1,8 +1,8 @@
-import SharedImage from '@readr-media/react-image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import ResponsiveImage from '~/components/shared/responsive-image'
 import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
 import { MAX_CONTENT_WIDTH } from '~/constants/layout'
 import type { SectionInfo } from '~/utils/homepage-api'
@@ -277,19 +277,12 @@ const SpecialColumnSection = ({ section }: SpecialColumnSectionProps) => {
               >
                 <ArticleCard>
                   <ImageWrapper>
-                    <SharedImage
-                      key={`special-${activeCategory}-${post.id}`}
-                      images={image || {}}
-                      imagesWebP={imageWebp || {}}
-                      defaultImage={DEFAULT_POST_IMAGE_PATH}
+                    <ResponsiveImage
+                      resized={image}
+                      resizedWebp={imageWebp}
+                      defaultSrc={DEFAULT_POST_IMAGE_PATH}
                       alt={post.title}
-                      priority={false}
-                      rwd={{
-                        mobile: '100vw',
-                        tablet: '50vw',
-                        desktop: '33vw',
-                        default: '400px',
-                      }}
+                      sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 33vw"
                     />
                   </ImageWrapper>
                   <ImageOverlay>
