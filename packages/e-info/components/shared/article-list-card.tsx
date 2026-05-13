@@ -43,7 +43,7 @@ const CardContainer = styled.article<StyledProps>`
     `}
 `
 
-const CardLink = styled.a`
+const CardLink = styled.span`
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -184,7 +184,7 @@ export default function ArticleListCard({
       $shouldReverseInMobile={shouldReverseInMobile}
       $shouldHighlightReport={isReportAndShouldHighlight}
     >
-      <Link href={href} passHref legacyBehavior>
+      <Link href={href}>
         <CardLink onClick={onClick} />
       </Link>
       <ImageWrapper

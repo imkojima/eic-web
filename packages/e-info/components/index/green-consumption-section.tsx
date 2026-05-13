@@ -169,7 +169,7 @@ const ArticlesGrid = styled.div`
   }
 `
 
-const ArticleCard = styled.a`
+const ArticleCard = styled.span`
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -281,12 +281,7 @@ const GreenConsumptionSection = ({ data }: GreenConsumptionSectionProps) => {
               const imageWebp = post.heroImage?.resizedWebp
 
               return (
-                <Link
-                  key={post.id}
-                  href={`/node/${post.id}`}
-                  passHref
-                  legacyBehavior
-                >
+                <Link key={post.id} href={`/node/${post.id}`}>
                   <ArticleCard>
                     <ImageWrapper>
                       <ResponsiveImage

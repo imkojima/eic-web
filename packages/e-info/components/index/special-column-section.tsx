@@ -147,7 +147,7 @@ const ArticlesGrid = styled.div`
   }
 `
 
-const ArticleCard = styled.a`
+const ArticleCard = styled.span`
   position: relative;
   cursor: pointer;
   overflow: hidden;
@@ -260,7 +260,6 @@ const SpecialColumnSection = ({ section }: SpecialColumnSectionProps) => {
           ))}
         </CategoryTabs>
       </Header>
-
       {/* Articles Grid */}
       <ArticlesGrid>
         {currentPosts.length > 0 ? (
@@ -269,12 +268,7 @@ const SpecialColumnSection = ({ section }: SpecialColumnSectionProps) => {
             const imageWebp = post.heroImage?.resizedWebp
 
             return (
-              <Link
-                key={post.id}
-                href={`/node/${post.id}`}
-                passHref
-                legacyBehavior
-              >
+              <Link key={post.id} href={`/node/${post.id}`}>
                 <ArticleCard>
                   <ImageWrapper>
                     <ResponsiveImage

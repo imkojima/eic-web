@@ -173,7 +173,7 @@ const FeaturedExcerpt = styled.p`
   }
 `
 
-const EnterButton = styled.a`
+const EnterButton = styled.span`
   display: none;
   align-self: flex-end;
   padding: 0;
@@ -199,7 +199,7 @@ const EnterButton = styled.a`
   }
 `
 
-const MobileEnterButton = styled.a`
+const MobileEnterButton = styled.span`
   display: block;
   text-align: center;
   padding: 0;
@@ -242,7 +242,7 @@ const ArticleGrid = styled.div`
   }
 `
 
-const ArticleCard = styled.a`
+const ArticleCard = styled.span`
   display: block;
   text-decoration: none;
   cursor: pointer;
@@ -359,18 +359,17 @@ const FeaturedTopicsPage: NextPageWithLayout<PageProps> = ({ topics }) => {
       <FeaturedSection key={topic.id}>
         <FeaturedArticle>
           <FeaturedImageWrapper>
-            <Link href={topicHref} passHref legacyBehavior>
-              <a
-                onClick={() =>
-                  gtag.sendEvent(
-                    'featured-topics',
-                    'click',
-                    `featured-${topic.title}`
-                  )
-                }
-              >
-                <FeaturedImage src={topicImage} alt={topic.title || ''} />
-              </a>
+            <Link
+              href={topicHref}
+              onClick={() =>
+                gtag.sendEvent(
+                  'featured-topics',
+                  'click',
+                  `featured-${topic.title}`
+                )
+              }
+            >
+              <FeaturedImage src={topicImage} alt={topic.title || ''} />
             </Link>
           </FeaturedImageWrapper>
 
@@ -387,7 +386,7 @@ const FeaturedTopicsPage: NextPageWithLayout<PageProps> = ({ topics }) => {
                 ) : null
               })()}
             </FeaturedTextContent>
-            <Link href={topicHref} passHref legacyBehavior>
+            <Link href={topicHref}>
               <EnterButton
                 onClick={() =>
                   gtag.sendEvent(
@@ -402,7 +401,6 @@ const FeaturedTopicsPage: NextPageWithLayout<PageProps> = ({ topics }) => {
             </Link>
           </FeaturedContent>
         </FeaturedArticle>
-
         {/* Show article grid with first topic's posts (max 3) */}
         {index === 0 && firstTopicPosts.length > 0 && (
           <ArticleGrid>
@@ -416,7 +414,7 @@ const FeaturedTopicsPage: NextPageWithLayout<PageProps> = ({ topics }) => {
               const postDate = formatPostDate(post.publishTime)
 
               return (
-                <Link key={post.id} href={postHref} passHref legacyBehavior>
+                <Link key={post.id} href={postHref}>
                   <ArticleCard
                     onClick={() =>
                       gtag.sendEvent(
@@ -439,7 +437,7 @@ const FeaturedTopicsPage: NextPageWithLayout<PageProps> = ({ topics }) => {
             })}
           </ArticleGrid>
         )}
-        <Link href={topicHref} passHref legacyBehavior>
+        <Link href={topicHref}>
           <MobileEnterButton
             onClick={() =>
               gtag.sendEvent('featured-topics', 'click', `enter-${topic.title}`)

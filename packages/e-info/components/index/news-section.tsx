@@ -165,7 +165,7 @@ const Sidebar = styled.div`
   }
 `
 
-const NewsItem = styled.a`
+const NewsItem = styled.span`
   display: block;
   text-decoration: none;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale[80]};
@@ -230,7 +230,7 @@ const FeaturedImageWrapper = styled.div`
   }
 `
 
-const FeaturedArticle = styled.a`
+const FeaturedArticle = styled.span`
   display: block;
   text-decoration: none;
   order: 1;
@@ -325,7 +325,7 @@ const RelatedArticles = styled.div`
   }
 `
 
-const RelatedArticle = styled.a`
+const RelatedArticle = styled.span`
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -500,19 +500,13 @@ const NewsSection = ({ section }: NewsSectionProps) => {
           ))}
         </CategoryTabs>
       </Header>
-
       {/* Main Content */}
       <MainContent>
         {/* A - Sidebar */}
         <Sidebar>
           {sidebarPosts.length > 0 ? (
             sidebarPosts.map((post, index) => (
-              <Link
-                key={post.id}
-                href={`/node/${post.id}`}
-                passHref
-                legacyBehavior
-              >
+              <Link key={post.id} href={`/node/${post.id}`}>
                 <NewsItem>
                   <NewsDate>{formatDate(post.publishTime)}</NewsDate>
                   <NewsTitle>{post.title}</NewsTitle>
@@ -529,7 +523,7 @@ const NewsSection = ({ section }: NewsSectionProps) => {
 
         {/* B - Featured Article */}
         {featuredPost && (
-          <Link href={`/node/${featuredPost.id}`} passHref legacyBehavior>
+          <Link href={`/node/${featuredPost.id}`}>
             <FeaturedArticle>
               <FeaturedImageWrapper>
                 <ResponsiveImage
@@ -563,12 +557,7 @@ const NewsSection = ({ section }: NewsSectionProps) => {
               const imageWebp = post.heroImage?.resizedWebp
 
               return (
-                <Link
-                  key={post.id}
-                  href={`/node/${post.id}`}
-                  passHref
-                  legacyBehavior
-                >
+                <Link key={post.id} href={`/node/${post.id}`}>
                   <RelatedArticle>
                     <RelatedImageWrapper>
                       <ResponsiveImage

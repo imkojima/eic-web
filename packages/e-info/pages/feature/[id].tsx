@@ -139,7 +139,7 @@ const ArticleList = styled.div`
   }
 `
 
-const ArticleCard = styled.a`
+const ArticleCard = styled.span`
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
@@ -436,7 +436,6 @@ const TopicPage: NextPageWithLayout<PageProps> = ({ topic }) => {
           />
         </HeroImage>
       )}
-
       {/* Content */}
       <ContentWrapper>
         <TopicHeader>
@@ -468,12 +467,7 @@ const TopicPage: NextPageWithLayout<PageProps> = ({ topic }) => {
         {/* Article List */}
         <ArticleList ref={articleListRef}>
           {currentPosts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/node/${post.id}`}
-              passHref
-              legacyBehavior
-            >
+            <Link key={post.id} href={`/node/${post.id}`}>
               <ArticleCard
                 onClick={() =>
                   gtag.sendEvent('topic', 'click', `article-${post.title}`)

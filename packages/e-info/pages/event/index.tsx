@@ -99,7 +99,7 @@ const EventGrid = styled.div`
   }
 `
 
-const EventCard = styled.a`
+const EventCard = styled.span`
   display: block;
   background: #fff;
   overflow: hidden;
@@ -541,12 +541,7 @@ const EventsPage: NextPageWithLayout<PageProps> = ({ events }) => {
 
         <EventGrid>
           {currentEvents.map((event) => (
-            <Link
-              key={event.id}
-              href={`/event/${event.id}`}
-              passHref
-              legacyBehavior
-            >
+            <Link key={event.id} href={`/event/${event.id}`}>
               <EventCard
                 onClick={() => gtag.sendEvent('events', 'click', event.name)}
               >

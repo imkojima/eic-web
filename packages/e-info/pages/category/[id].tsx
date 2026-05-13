@@ -504,7 +504,7 @@ const ClassifyArticleList = styled.div`
   }
 `
 
-const ClassifyLargeCard = styled.a`
+const ClassifyLargeCard = styled.span`
   display: block;
   text-decoration: none;
   cursor: pointer;
@@ -561,7 +561,7 @@ const ClassifyLargeCardTitle = styled.h3`
   }
 `
 
-const ClassifySmallCard = styled.a`
+const ClassifySmallCard = styled.span`
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -741,10 +741,9 @@ const ClassifyArticleSectionComponent = ({
           閱讀更多
         </ClassifyReadMoreLink>
       </ClassifyHeader>
-
       <ClassifyArticleList>
         {/* Large Card */}
-        <Link href={`/node/${largePost.id}`} passHref legacyBehavior>
+        <Link href={`/node/${largePost.id}`}>
           <ClassifyLargeCard>
             <ClassifyLargeCardImageWrapper>
               <ResponsiveImage
@@ -764,7 +763,7 @@ const ClassifyArticleSectionComponent = ({
 
         {/* Small Cards */}
         {smallPosts.map((post) => (
-          <Link key={post.id} href={`/node/${post.id}`} passHref legacyBehavior>
+          <Link key={post.id} href={`/node/${post.id}`}>
             <ClassifySmallCard>
               <ClassifySmallCardImageWrapper>
                 <ResponsiveImage
@@ -785,7 +784,6 @@ const ClassifyArticleSectionComponent = ({
           </Link>
         ))}
       </ClassifyArticleList>
-
       <ClassifyMobileReadMoreWrapper>
         <ClassifyMobileReadMoreLink
           href={`/category/${categoryId}?classify=${classify.id}`}

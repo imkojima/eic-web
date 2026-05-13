@@ -106,7 +106,7 @@ const JobGrid = styled.div`
   }
 `
 
-const JobCard = styled.a`
+const JobCard = styled.span`
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -420,12 +420,7 @@ const JobsPage: NextPageWithLayout<PageProps> = ({ jobs }) => {
         ) : (
           <JobGrid>
             {currentJobs.map((job) => (
-              <Link
-                key={job.id}
-                href={`/job/${job.id}`}
-                passHref
-                legacyBehavior
-              >
+              <Link key={job.id} href={`/job/${job.id}`}>
                 <JobCard
                   onClick={() => gtag.sendEvent('jobs', 'click', job.title)}
                 >

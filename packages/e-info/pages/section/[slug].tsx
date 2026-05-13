@@ -521,7 +521,7 @@ const ArticleList = styled.div`
 `
 
 // Large Card (First article)
-const LargeCard = styled.a`
+const LargeCard = styled.span`
   display: block;
   text-decoration: none;
   cursor: pointer;
@@ -584,7 +584,7 @@ const LargeCardTitle = styled.h3`
 `
 
 // Small Card (Secondary articles)
-const SmallCard = styled.a`
+const SmallCard = styled.span`
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -754,10 +754,9 @@ const CategoryArticleSection = ({ category }: CategoryArticleSectionProps) => {
         <CategoryName>{category.name}</CategoryName>
         <ReadMoreLink href={`/category/${category.id}`}>閱讀更多</ReadMoreLink>
       </CategoryHeader>
-
       <ArticleList>
         {/* Large Card */}
-        <Link href={`/node/${largePost.id}`} passHref legacyBehavior>
+        <Link href={`/node/${largePost.id}`}>
           <LargeCard>
             <LargeCardImageWrapper>
               <ResponsiveImage
@@ -777,7 +776,7 @@ const CategoryArticleSection = ({ category }: CategoryArticleSectionProps) => {
 
         {/* Small Cards */}
         {smallPosts.map((post) => (
-          <Link key={post.id} href={`/node/${post.id}`} passHref legacyBehavior>
+          <Link key={post.id} href={`/node/${post.id}`}>
             <SmallCard>
               <SmallCardImageWrapper>
                 <ResponsiveImage
@@ -798,7 +797,6 @@ const CategoryArticleSection = ({ category }: CategoryArticleSectionProps) => {
           </Link>
         ))}
       </ArticleList>
-
       <MobileReadMoreWrapper>
         <MobileReadMoreLink href={`/category/${category.id}`}>
           閱讀更多

@@ -100,7 +100,7 @@ const ArticlesGrid = styled.div`
   }
 `
 
-const ArticleCard = styled.a`
+const ArticleCard = styled.span`
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -210,7 +210,6 @@ const HighlightSection = ({ picks = [] }: HighlightSectionProps) => {
         <AccentBar />
         <Title>焦點話題</Title>
       </Header>
-
       {/* Articles Grid */}
       <ArticlesGrid>
         {validPicks.map((pick) => {
@@ -219,7 +218,7 @@ const HighlightSection = ({ picks = [] }: HighlightSectionProps) => {
           const linkUrl = getLinkUrl(pick)
 
           return (
-            <Link key={pick.id} href={linkUrl} passHref legacyBehavior>
+            <Link key={pick.id} href={linkUrl}>
               <ArticleCard>
                 <ImageContainer>
                   <ResponsiveImage

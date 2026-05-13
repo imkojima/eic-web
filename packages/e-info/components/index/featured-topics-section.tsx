@@ -155,7 +155,7 @@ const LeftSection = styled.div`
   order: 0;
 `
 
-const HeroArticle = styled.a`
+const HeroArticle = styled.span`
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -210,7 +210,7 @@ const ArticlesList = styled.div`
   gap: 1.5rem;
 `
 
-const ArticleItem = styled.a`
+const ArticleItem = styled.span`
   display: grid;
   grid-template-columns: 1fr 98px;
   gap: 12px;
@@ -394,7 +394,7 @@ const RankingList = styled.div`
   }
 `
 
-const RankingItem = styled.a`
+const RankingItem = styled.span`
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -537,13 +537,12 @@ const FeaturedTopicsSection = ({
           ))}
         </CategoryTabs>
       </Header>
-
       {/* Main Content */}
       <MainContent>
         <LeftSection>
           {/* Hero Article - Links to topic page */}
           {heroTopic && (
-            <Link href={`/feature/${heroTopic.id}`} passHref legacyBehavior>
+            <Link href={`/feature/${heroTopic.id}`}>
               <HeroArticle>
                 <HeroImageWrapper>
                   <ResponsiveImage
@@ -570,7 +569,7 @@ const FeaturedTopicsSection = ({
                 const imageWebp = item.heroImage?.resizedWebp
 
                 return (
-                  <Link key={item.id} href={item.href} passHref legacyBehavior>
+                  <Link key={item.id} href={item.href}>
                     <ArticleItem>
                       <ArticleContent>
                         <ArticleTitle>{item.title}</ArticleTitle>
@@ -607,12 +606,7 @@ const FeaturedTopicsSection = ({
             </RankingHeader>
             <RankingList>
               {rankings.slice(0, 3).map((item) => (
-                <Link
-                  key={item.post_id}
-                  href={`/node/${item.post_id}`}
-                  passHref
-                  legacyBehavior
-                >
+                <Link key={item.post_id} href={`/node/${item.post_id}`}>
                   <RankingItem>
                     <RankingNumber>{item.rank}</RankingNumber>
                     <RankingContent>

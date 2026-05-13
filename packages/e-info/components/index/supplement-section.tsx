@@ -157,7 +157,7 @@ const ArticlesGrid = styled.div`
   }
 `
 
-const ArticleCard = styled.a`
+const ArticleCard = styled.span`
   display: flex;
   flex-direction: row;
   cursor: pointer;
@@ -329,7 +329,6 @@ const SupplementSection = ({ section }: SupplementSectionProps) => {
           ))}
         </CategoryTabs>
       </Header>
-
       {/* Articles Grid */}
       <ArticlesGrid>
         {currentPosts.length > 0 ? (
@@ -338,12 +337,7 @@ const SupplementSection = ({ section }: SupplementSectionProps) => {
             const imageWebp = post.heroImage?.resizedWebp
 
             return (
-              <Link
-                key={post.id}
-                href={`/node/${post.id}`}
-                passHref
-                legacyBehavior
-              >
+              <Link key={post.id} href={`/node/${post.id}`}>
                 <ArticleCard>
                   <ImageWrapper>
                     <ResponsiveImage
