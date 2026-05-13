@@ -21,7 +21,7 @@
     "@twreporter/errors": "^1.1.2",
     "@types/draft-js": "^0.11.10",
     "@types/http-proxy": "^1.17.17",
-    "axios": "^1.3.4",
+    "axios": "^1.16.0",
     "dayjs": "^1.11.7",
     "firebase": "^10.7.0",
     "firebase-admin": "^13.6.0",
@@ -41,7 +41,7 @@
     "react-helmet": "^6.1.0",
     "react-slick": "^0.30.3",
     "rxjs": "^7.8.0",
-    "sharp": "^0.31.3",
+    "sharp": "^0.33.5",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.6",
     "ts-import": "^4.0.0-beta.6"

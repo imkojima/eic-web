@@ -22,7 +22,7 @@
     "node": "^20.19.5"
   },
   "devDependencies": {
-    "eslint": "8.24.0",
+    "eslint": "8.57.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.1",
@@ -38,6 +38,30 @@
   "resolutions": {
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
-    "@types/styled-components": "5.1.26"
+    "@types/styled-components": "5.1.26",
+    "node-forge": "^1.4.0",
+    "postcss": "^8.5.14",
+    "undici": "^6.24.0",
+    "protobufjs": "^7.5.6",
+    "immutable": "^3.8.3",
+    "fast-xml-parser": "^4.5.5",
+    "micromatch": "^4.0.8",
+    "picomatch": "^2.3.2",
+    "brace-expansion": "^2.0.3",
+    "follow-redirects": "^1.16.0",
+    "qs": "^6.14.2",
+    "lodash": "^4.17.21",
+    "axios": "^1.16.0",
+    "@babel/plugin-transform-modules-systemjs": "^7.29.4",
+    "svgo": "^2.8.1",
+    "yaml": "^2.8.3",
+    "ajv": "^6.14.0",
+    "flatted": "^3.4.2",
+    "handlebars": "^4.7.9",
+    "@octokit/plugin-paginate-rest": "^9.2.2",
+    "@octokit/request": "^8.4.1",
+    "@octokit/request-error": "^5.1.1",
+    "ip-address": "^10.1.1",
+    "jws": "^4.0.1"
   }
 }
