@@ -59,8 +59,7 @@ eic-web/
 │   └── draft-renderer/           # Draft.js content renderer
 │       └── (Separate package, migrated to @eic-web/draft-renderer 1.4.4)
 ├── .husky/                       # Git hooks
-├── lerna.json                    # Lerna config
-├── package.json                  # Root package.json
+├── package.json                  # Root package.json (yarn workspaces)
 └── cloudbuild.yaml              # GCP Cloud Build config
 ```
 
@@ -605,8 +604,8 @@ yarn install
 cd packages/e-info
 yarn dev
 
-# Or use lerna from root
-lerna run dev --scope=readr
+# Or from repo root via yarn workspaces
+yarn workspace e-info run dev
 ```
 
 Runs at `http://localhost:3000` by default
