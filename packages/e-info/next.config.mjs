@@ -109,9 +109,7 @@ const nextConfig = {
   },
   output: 'standalone',
   // In monorepo, tell Next.js where the workspace root is for dependency tracing
-  experimental: {
-    outputFileTracingRoot: path.join(__dirname, '../../'),
-  },
+  outputFileTracingRoot: path.join(__dirname, '../../'),
   async headers() {
     return [
       // for debug purpose
