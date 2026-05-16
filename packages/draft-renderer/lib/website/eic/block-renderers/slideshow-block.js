@@ -59,7 +59,7 @@ var SlideShowImage = _styledComponents["default"].figure.withConfig({
   displayName: "slideshow-block__SlideShowImage",
   componentId: "sc-gsubhh-2"
 })(["width:100%;aspect-ratio:", ";margin:0;& + .slideshow-image{margin-top:", "px;}", "{aspect-ratio:unset;max-height:", ";flex-grow:", ";flex-shrink:", ";flex-basis:", ";overflow:", ";", " img{width:", ";max-width:100%;height:", ";object-fit:contain;}&:hover{cursor:", ";filter:", ";transition:", ";}& + .slideshow-image{margin-top:unset;}}"], function (props) {
-  return props.isSingle ? 'unset' : '1/1';
+  return props.isSingle ? 'unset' : '4/3';
 }, SpacingBetweenSlideImages, function (_ref4) {
   var theme = _ref4.theme;
   return theme.breakpoint.xl;

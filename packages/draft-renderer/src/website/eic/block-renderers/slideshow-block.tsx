@@ -46,7 +46,7 @@ const SlideShowRow = styled.div`
 
 const SlideShowImage = styled.figure`
   width: 100%;
-  aspect-ratio: ${(props) => (props.isSingle ? 'unset' : '1/1')};
+  aspect-ratio: ${(props) => (props.isSingle ? 'unset' : '4/3')};
   margin: 0;
 
   & + .slideshow-image {
