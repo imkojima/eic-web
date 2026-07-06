@@ -99,6 +99,20 @@ export type FavoriteWithPost = {
   }
 }
 
+// Favorite statistics grouped by section (from memberFavoriteStats query)
+export type MemberFavoriteSectionStats = {
+  sectionId: string
+  sectionName: string | null
+  sectionSlug: string | null
+  count: number
+  postIds: string[]
+}
+
+export type MemberFavoriteStats = {
+  total: number
+  sections: MemberFavoriteSectionStats[]
+}
+
 export type Member = {
   id: string
   firebaseId: string
@@ -503,7 +517,11 @@ export const getMemberFavorites = async (
   memberId: string,
   firebaseId: string,
   take?: number,
-  skip?: number
+  skip?: number,
+  // When provided, only favorites whose post id is in this list are returned.
+  // Used to filter the bookmarks list by section (postIds come from
+  // memberFavoriteStats — a section-slug where-filter is ignored by the CMS).
+  postIds?: string[]
 ): Promise<FavoritesResult> => {
   const idToken = await getIdToken()
 
@@ -519,6 +537,7 @@ export const getMemberFavorites = async (
         firebaseId,
         take,
         skip,
+        postIds,
       }),
     })
 
@@ -541,6 +560,48 @@ export const getMemberFavorites = async (
   } catch (error) {
     console.error('getMemberFavorites error:', error)
     return { items: [], total: 0 }
+  }
+}
+
+/**
+ * Get member's favorite statistics (total + per-section counts and postIds)
+ * Uses API route with Firebase token verification.
+ * Sections with zero favorites are omitted by the backend.
+ */
+export const getMemberFavoriteStats = async (
+  memberId: string,
+  firebaseId: string
+): Promise<MemberFavoriteStats> => {
+  const idToken = await getIdToken()
+
+  try {
+    const response = await fetch('/api/favorites/stats', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        idToken,
+        memberId,
+        firebaseId,
+      }),
+    })
+
+    const result = (await response.json()) as {
+      success?: boolean
+      stats?: MemberFavoriteStats
+      error?: string
+    }
+
+    if (!response.ok || !result.success || !result.stats) {
+      console.error('getMemberFavoriteStats error:', result.error)
+      return { total: 0, sections: [] }
+    }
+
+    return result.stats
+  } catch (error) {
+    console.error('getMemberFavoriteStats error:', error)
+    return { total: 0, sections: [] }
   }
 }
 

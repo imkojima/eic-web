@@ -12,6 +12,14 @@ type RequestBody = {
   firebaseId: string
   take?: number
   skip?: number
+  // When provided, restrict favorites to these post ids (used for section
+  // filtering — postIds come from the memberFavoriteStats query).
+  postIds?: string[]
+}
+
+type FavoriteWhereInput = {
+  member: { id: { equals: string } }
+  post?: { id: { in: string[] } }
 }
 
 type FavoriteWithPost = {
@@ -41,9 +49,9 @@ const VERIFY_MEMBER_OWNERSHIP = `
 `
 
 const GET_MEMBER_FAVORITES = `
-  query GetMemberFavorites($memberId: ID!, $take: Int, $skip: Int) {
+  query GetMemberFavorites($where: FavoriteWhereInput!, $take: Int, $skip: Int) {
     favorites(
-      where: { member: { id: { equals: $memberId } } }
+      where: $where
       orderBy: { createdAt: desc }
       take: $take
       skip: $skip
@@ -77,8 +85,8 @@ const GET_MEMBER_FAVORITES = `
 `
 
 const COUNT_MEMBER_FAVORITES = `
-  query CountMemberFavorites($memberId: ID!) {
-    favoritesCount(where: { member: { id: { equals: $memberId } } })
+  query CountMemberFavorites($where: FavoriteWhereInput!) {
+    favoritesCount(where: $where)
   }
 `
 
@@ -91,7 +99,7 @@ export default async function handler(
   }
 
   try {
-    const { idToken, memberId, firebaseId, take, skip } =
+    const { idToken, memberId, firebaseId, take, skip, postIds } =
       req.body as RequestBody
 
     if (!memberId || !firebaseId) {
@@ -138,15 +146,25 @@ export default async function handler(
       })
     }
 
+    // Build the where filter. When postIds is provided (section filtering),
+    // restrict to those posts — the CMS ignores a post.section where-filter,
+    // so we filter by the postIds returned from memberFavoriteStats instead.
+    const where: FavoriteWhereInput = {
+      member: { id: { equals: memberId } },
+    }
+    if (Array.isArray(postIds)) {
+      where.post = { id: { in: postIds } }
+    }
+
     // Execute GraphQL queries
     const [favoritesResult, countResult] = await Promise.all([
       serverGraphQL<{ favorites: FavoriteWithPost[] }>(GET_MEMBER_FAVORITES, {
-        memberId,
+        where,
         take,
         skip,
       }),
       serverGraphQL<{ favoritesCount: number }>(COUNT_MEMBER_FAVORITES, {
-        memberId,
+        where,
       }),
     ])
 

@@ -2,7 +2,7 @@ import type { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import type { ReactElement } from 'react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import LayoutGeneral from '~/components/layout/layout-general'
@@ -10,9 +10,16 @@ import MemberPageTitle from '~/components/member/member-page-title'
 import { DEFAULT_POST_IMAGE_PATH } from '~/constants/constant'
 import { MAX_CONTENT_WIDTH } from '~/constants/layout'
 import { useAuth } from '~/hooks/useAuth'
-import type { FavoriteWithPost } from '~/lib/graphql/member'
-import { getMemberFavorites } from '~/lib/graphql/member'
+import type {
+  FavoriteWithPost,
+  MemberFavoriteStats,
+} from '~/lib/graphql/member'
+import {
+  getMemberFavorites,
+  getMemberFavoriteStats,
+} from '~/lib/graphql/member'
 import type { NextPageWithLayout } from '~/pages/_app'
+import IconFavorite from '~/public/icons/favorite.svg'
 import { setPrivateCacheControl } from '~/utils/common'
 import { fetchHeaderData } from '~/utils/header-data'
 import { formatPostDate } from '~/utils/post'
@@ -114,6 +121,56 @@ const PageHeader = styled(MemberPageTitle)`
 
   ${({ theme }) => theme.breakpoint.md} {
     margin-bottom: 32px;
+  }
+`
+
+const StatsBar = styled.p`
+  display: flex;
+  align-items: flex-start;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.colors.grayscale[20]};
+  margin: 0 0 24px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-bottom: 32px;
+  }
+`
+
+const StatsIcon = styled(IconFavorite)`
+  width: 24px;
+  height: 23px;
+  flex-shrink: 0;
+  margin-right: 8px;
+  /* center the 23px icon against the first 24px line box */
+  margin-top: 1px;
+`
+
+// Wraps the text so it flows/wraps as one flex child beside the icon.
+const StatsText = styled.span`
+  min-width: 0;
+`
+
+type StatsSegmentProps = {
+  $isActive?: boolean
+}
+
+// Clickable segment inside the stats bar (the total and each section name).
+const StatsSegment = styled.button<StatsSegmentProps>`
+  display: inline;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.primary[40]};
+  font-weight: ${({ $isActive }) => ($isActive ? '700' : '400')};
+  text-decoration: underline;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary[20]};
   }
 `
 
@@ -262,7 +319,36 @@ const MemberBookmarksPage: NextPageWithLayout = () => {
   const [initialLoading, setInitialLoading] = useState(true)
   const sentinelRef = useRef<HTMLDivElement>(null)
 
-  // Fetch favorites when member is available
+  // Favorite statistics (total + per-section counts). null = active section
+  // filter means "all"; otherwise the selected section id.
+  const [stats, setStats] = useState<MemberFavoriteStats | null>(null)
+  const [activeSection, setActiveSection] = useState<string | null>(null)
+
+  // postIds of the active section, or undefined when showing all favorites.
+  // Used to filter the list request server-side.
+  const activePostIds = useMemo(() => {
+    if (!activeSection) return undefined
+    return stats?.sections.find((s) => s.sectionId === activeSection)?.postIds
+  }, [activeSection, stats])
+
+  // Fetch favorite stats when member is available
+  const fetchStats = useCallback(async () => {
+    if (!member?.id || !firebaseUser?.uid) return
+    try {
+      const result = await getMemberFavoriteStats(member.id, firebaseUser.uid)
+      setStats(result)
+    } catch (err) {
+      console.error('Failed to fetch favorite stats:', err)
+    }
+  }, [member?.id, firebaseUser?.uid])
+
+  useEffect(() => {
+    if (member?.id) {
+      fetchStats()
+    }
+  }, [member?.id, fetchStats])
+
+  // Fetch favorites when member is available or the section filter changes
   const fetchFavorites = useCallback(async () => {
     if (!member?.id || !firebaseUser?.uid) return
 
@@ -272,7 +358,8 @@ const MemberBookmarksPage: NextPageWithLayout = () => {
         member.id,
         firebaseUser.uid,
         ITEMS_PER_PAGE,
-        0
+        0,
+        activePostIds
       )
       setFavorites(items)
       setHasMore(items.length < total)
@@ -281,7 +368,7 @@ const MemberBookmarksPage: NextPageWithLayout = () => {
     } finally {
       setInitialLoading(false)
     }
-  }, [member?.id, firebaseUser?.uid])
+  }, [member?.id, firebaseUser?.uid, activePostIds])
 
   useEffect(() => {
     if (member?.id) {
@@ -306,7 +393,8 @@ const MemberBookmarksPage: NextPageWithLayout = () => {
         member.id,
         firebaseUser.uid,
         ITEMS_PER_PAGE,
-        favorites.length
+        favorites.length,
+        activePostIds
       )
       setFavorites((prev) => [...prev, ...moreFavorites])
       setHasMore(favorites.length + moreFavorites.length < total)
@@ -316,7 +404,7 @@ const MemberBookmarksPage: NextPageWithLayout = () => {
       isLoadingMoreRef.current = false
       setIsLoadingMore(false)
     }
-  }, [member?.id, firebaseUser?.uid, favorites.length])
+  }, [member?.id, firebaseUser?.uid, favorites.length, activePostIds])
 
   // Infinite scroll: observe sentinel to trigger load more
   useEffect(() => {
@@ -373,6 +461,38 @@ const MemberBookmarksPage: NextPageWithLayout = () => {
           </MobileNav>
 
           <PageHeader title="收藏文章" clickFrom="member-bookmarks" />
+
+          {stats && stats.total > 0 && (
+            <StatsBar>
+              <StatsIcon aria-hidden="true" />
+              <StatsText>
+                你已收藏 {stats.total} 篇文章
+                {stats.sections.length > 0 && (
+                  <>
+                    ，包含{' '}
+                    {stats.sections.map((section, idx) => (
+                      <span key={section.sectionId}>
+                        {idx > 0 && '、'}
+                        <StatsSegment
+                          type="button"
+                          $isActive={activeSection === section.sectionId}
+                          onClick={() =>
+                            setActiveSection((prev) =>
+                              prev === section.sectionId
+                                ? null
+                                : section.sectionId
+                            )
+                          }
+                        >
+                          {section.count} 篇{section.sectionName ?? ''}
+                        </StatsSegment>
+                      </span>
+                    ))}
+                  </>
+                )}
+              </StatsText>
+            </StatsBar>
+          )}
 
           {isContentLoading ? (
             <LoadingWrapper>載入中...</LoadingWrapper>
