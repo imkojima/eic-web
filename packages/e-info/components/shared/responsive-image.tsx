@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 type SizeMap = {
   original?: string
@@ -35,9 +35,12 @@ function pickFallbackSrc(images?: SizeMap | null): string {
   return images.w1200 || images.w800 || images.w480 || images.original || ''
 }
 
-// Stateless responsive image. Replaces @readr-media/react-image for cases where
-// the source can change in place (e.g. tab switches) — that component keeps the
-// loaded URL in internal state and never re-runs its effect when `images` change.
+// Replaces @readr-media/react-image for cases where the source can change in
+// place (e.g. tab switches) — that component keeps the loaded URL in internal
+// state and never re-runs its effect when `images` change. This component stays
+// stateless for the loaded URL itself; the only state it holds is whether the
+// current source errored, so it can fall back to `defaultSrc` instead of a
+// broken image, and that flag is reset whenever the source changes.
 const ResponsiveImage = ({
   resized,
   resizedWebp,
@@ -52,18 +55,28 @@ const ResponsiveImage = ({
   const fallbackSrc =
     pickFallbackSrc(resized) || pickFallbackSrc(resizedWebp) || defaultSrc
 
+  const [hasError, setHasError] = useState(false)
+
+  useEffect(() => {
+    setHasError(false)
+  }, [fallbackSrc])
+
   return (
     <picture style={{ display: 'contents' }}>
-      {webpSrcSet && (
+      {/* Drop the <source> candidates once loading fails so the <picture>
+          source-selection algorithm falls through to the <img> below instead
+          of re-matching (and re-failing on) the same webp/jpeg source. */}
+      {!hasError && webpSrcSet && (
         <source type="image/webp" srcSet={webpSrcSet} sizes={sizes} />
       )}
-      {jpegSrcSet && <source srcSet={jpegSrcSet} sizes={sizes} />}
+      {!hasError && jpegSrcSet && <source srcSet={jpegSrcSet} sizes={sizes} />}
       <img
-        src={fallbackSrc}
+        src={hasError ? defaultSrc : fallbackSrc}
         alt={alt}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
         className={className}
+        onError={() => setHasError(true)}
         style={{
           width: '100%',
           height: '100%',
