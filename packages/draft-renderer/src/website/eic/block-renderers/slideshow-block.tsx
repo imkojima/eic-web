@@ -3,8 +3,11 @@ import { DraftEntityInstance } from 'draft-js'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import defaultImage from '../assets/post-default.png'
 import SlideShowLightBox from '../components/slideshow-lightbox'
+
+// Root-relative path served by the consuming app's /public directory — see
+// image-block.tsx for why the bundled asset import 404s in production.
+const defaultImage = '/post-default.png'
 
 const SlideShowDesktopSize = 960
 const SpacingBetweenSlideImages = 12

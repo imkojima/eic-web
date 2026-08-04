@@ -8,7 +8,11 @@ var _react = _interopRequireDefault(require("react"));
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 var _reactImage = _interopRequireDefault(require("@readr-media/react-image"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-var defaultImage = "/lib/public/57b35d645151e45c1816907625905202.png";
+// Root-relative path served by the consuming app's /public directory.
+// The babel file-loader asset import previously used here bakes in a build-time
+// path (dev: `/lib/public/[hash].png`, prod: an unpkg URL) that isn't reachable
+// from the consuming app's origin, so the fallback 404s exactly when it's needed.
+var defaultImage = '/post-default.png';
 var Figure = _styledComponents["default"].figure.withConfig({
   displayName: "image-block__Figure",
   componentId: "sc-1v0uv2e-0"

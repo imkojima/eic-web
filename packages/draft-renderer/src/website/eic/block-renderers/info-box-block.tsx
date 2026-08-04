@@ -2,7 +2,10 @@ import { ContentBlock, ContentState } from 'draft-js'
 import React from 'react'
 import styled from 'styled-components'
 import CustomImage from '@readr-media/react-image'
-import defaultImage from '../assets/post-default.png'
+
+// Root-relative path served by the consuming app's /public directory — see
+// image-block.tsx for why the bundled asset import 404s in production.
+const defaultImage = '/post-default.png'
 
 import {
   defaultH2Style,

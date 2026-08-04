@@ -2,7 +2,12 @@ import { ContentBlock, ContentState } from 'draft-js'
 import React from 'react'
 import styled from 'styled-components'
 import CustomImage from '@readr-media/react-image'
-import defaultImage from '../assets/post-default.png'
+
+// Root-relative path served by the consuming app's /public directory.
+// The babel file-loader asset import previously used here bakes in a build-time
+// path (dev: `/lib/public/[hash].png`, prod: an unpkg URL) that isn't reachable
+// from the consuming app's origin, so the fallback 404s exactly when it's needed.
+const defaultImage = '/post-default.png'
 
 const Figure = styled.figure`
   width: 100%;

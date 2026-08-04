@@ -2,8 +2,11 @@ import CustomImage from '@readr-media/react-image'
 import React from 'react'
 import styled from 'styled-components'
 
-import defaultImage from '../assets/post-default.png'
 import SlideShowSideBar from './slideshow-sidebar'
+
+// Root-relative path served by the consuming app's /public directory — see
+// image-block.tsx for why the bundled asset import 404s in production.
+const defaultImage = '/post-default.png'
 
 const LightBoxWrapper = styled.div`
   display: none;

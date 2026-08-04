@@ -10,7 +10,9 @@ var _react = _interopRequireDefault(require("react"));
 var _styledComponents = _interopRequireWildcard(require("styled-components"));
 function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, "default": e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-var defaultImage = "/lib/public/57b35d645151e45c1816907625905202.png";
+// Root-relative path served by the consuming app's /public directory — see
+// image-block.tsx for why the bundled asset import 404s in production.
+var defaultImage = '/post-default.png';
 var arrowShareStyle = (0, _styledComponents.css)(["width:64px;height:64px;margin:auto;cursor:pointer;border-radius:50%;visibility:", ";position:relative;&:hover{background-color:rgba(255,255,255,0.2);}&::before{content:'';position:absolute;top:50%;left:50%;width:12px;height:12px;border-left:2px solid #ffffff;border-bottom:2px solid #ffffff;}"], function (props) {
   return props.shouldHideArrow ? 'hidden' : 'visible';
 });

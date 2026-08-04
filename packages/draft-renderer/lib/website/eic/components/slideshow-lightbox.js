@@ -9,7 +9,9 @@ var _react = _interopRequireDefault(require("react"));
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 var _slideshowSidebar = _interopRequireDefault(require("./slideshow-sidebar"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-var defaultImage = "/lib/public/57b35d645151e45c1816907625905202.png";
+// Root-relative path served by the consuming app's /public directory — see
+// image-block.tsx for why the bundled asset import 404s in production.
+var defaultImage = '/post-default.png';
 var LightBoxWrapper = _styledComponents["default"].div.withConfig({
   displayName: "slideshow-lightbox__LightBoxWrapper",
   componentId: "sc-rdebmr-0"

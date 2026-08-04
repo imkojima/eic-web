@@ -9,7 +9,9 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 var _reactImage = _interopRequireDefault(require("@readr-media/react-image"));
 var _sharedStyle = require("../shared-style");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-var defaultImage = "/lib/public/57b35d645151e45c1816907625905202.png";
+// Root-relative path served by the consuming app's /public directory — see
+// image-block.tsx for why the bundled asset import 404s in production.
+var defaultImage = '/post-default.png';
 var infoboxDefaultSpacing = 8;
 var InfoBoxRenderWrapper = _styledComponents["default"].div.withConfig({
   displayName: "info-box-block__InfoBoxRenderWrapper",
